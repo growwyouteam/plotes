@@ -32,6 +32,14 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
+    // Don't show error for auth endpoints - let them handle fallback
+    const isAuthEndpoint = error.config?.url?.includes('/auth/login') || 
+                           error.config?.url?.includes('/auth/register')
+    
+    if (isAuthEndpoint) {
+      return Promise.reject(error)
+    }
+
     // If error is 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
