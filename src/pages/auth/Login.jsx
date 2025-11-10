@@ -51,7 +51,7 @@ const Login = () => {
       {/* Jayshree Properties Logo */}
       <Box display="flex" justifyContent="center" mb={3}>
         <img 
-          src="/src/assets/1759227114.png" 
+          src="/logo.png" 
           alt="Jayshree Properties" 
           style={{ width: '200px', height: 'auto' }}
         />

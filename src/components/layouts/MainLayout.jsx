@@ -178,7 +178,7 @@ const MainLayout = () => {
         <Stack direction="row" spacing={2} alignItems="center" width="100%">
           <Box
             component="img"
-            src="/src/assets/1759227114.png"
+            src="/logo.png"
             alt="Jayshree Properties"
             sx={{
               width: 48,
