@@ -39,6 +39,7 @@ import {
   TrendingUp,
   ExpandLess,
   ExpandMore,
+  LocationCity,
 } from '@mui/icons-material'
 import { logout } from '@/store/slices/authSlice'
 import toast from 'react-hot-toast'
@@ -92,6 +93,11 @@ const MainLayout = () => {
   // Navigation items based on role
   const getNavigationItems = () => {
     const roleName = user?.roleId?.name
+    
+    // Debug logging
+    console.log('🔍 User object:', user)
+    console.log('🔍 Role Name:', roleName)
+    console.log('🔍 Role ID:', user?.roleId)
 
     const commonItems = [
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
@@ -102,8 +108,29 @@ const MainLayout = () => {
         { text: 'Explore Colonies', icon: <Home />, path: '/buyer/colonies' },
         { text: 'My Bookings', icon: <Receipt />, path: '/buyer/bookings' },
       ],
+      'Admin': [
+        { text: 'Land Purchase', icon: <Business />, path: '/admin/colonies' },
+        { 
+          text: 'Properties', 
+          icon: <Home />, 
+          path: '/admin/properties',
+          submenu: [
+            { text: 'All Properties', path: '/admin/properties' },
+            { text: 'All Cities', path: '/admin/cities' },
+            { text: 'All Areas', path: '/admin/areas' }
+          ]
+        },
+        { text: 'Plots', icon: <Home />, path: '/admin/plots' },
+        { text: 'Bookings', icon: <Receipt />, path: '/admin/bookings' },
+        { text: 'Commissions', icon: <TrendingUp />, path: '/admin/commissions' },
+        { text: 'Users', icon: <People />, path: '/admin/users' },
+        { text: 'Roles', icon: <AdminPanelSettings />, path: '/admin/roles' },
+        { text: 'Staff Management', icon: <AdminPanelSettings />, path: '/admin/staff' },
+        { text: 'Calculator', icon: <Calculate />, path: '/admin/calculator' },
+        { text: 'Settings', icon: <AdminPanelSettings />, path: '/admin/settings' },
+      ],
       'Super Admin': [
-        { text: 'Land Purchase', icon: <Business />, path: '/admin/land-purchase' },
+        { text: 'Land Purchase', icon: <Business />, path: '/admin/colonies' },
         { 
           text: 'Properties', 
           icon: <Home />, 
@@ -124,7 +151,7 @@ const MainLayout = () => {
         { text: 'Settings', icon: <AdminPanelSettings />, path: '/admin/settings' },
       ],
       'Colony Manager': [
-        { text: 'Colonies', icon: <Business />, path: '/admin/colonies' },
+        { text: 'Land Purchase', icon: <Business />, path: '/admin/colonies' },
         { text: 'Plots', icon: <Home />, path: '/admin/plots' },
         { text: 'Bookings', icon: <Receipt />, path: '/admin/bookings' },
         { text: 'Registry', icon: <Description />, path: '/admin/registry' },

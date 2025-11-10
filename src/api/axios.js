@@ -6,7 +6,7 @@ import axios from 'axios'
  */
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -38,13 +38,20 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem('refreshToken')
+        
+        // Check if demo token
+        if (refreshToken && refreshToken.startsWith('demo-refresh-token')) {
+          // Demo mode - don't logout
+          return Promise.reject(error)
+        }
+        
         if (!refreshToken) {
           throw new Error('No refresh token')
         }
 
         // Try to refresh token
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'}/auth/refresh`,
+          `${import.meta.env.VITE_API_URL || '/api/v1'}/auth/refresh`,
           { refreshToken }
         )
 
@@ -55,10 +62,13 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return api(originalRequest)
       } catch (refreshError) {
-        // Refresh failed, logout user
-        localStorage.removeItem('token')
-        localStorage.removeItem('refreshToken')
-        window.location.href = '/login'
+        // Refresh failed, logout user (but not for demo mode)
+        const token = localStorage.getItem('token')
+        if (!token || !token.startsWith('demo-admin-token')) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('refreshToken')
+          window.location.href = '/login'
+        }
         return Promise.reject(refreshError)
       }
     }

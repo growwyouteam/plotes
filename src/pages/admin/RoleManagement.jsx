@@ -35,65 +35,12 @@ const RoleManagement = () => {
 
   const fetchRoles = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockRoles = [
-        {
-          _id: '1',
-          name: 'Super Admin',
-          description: 'Full system access',
-          isActive: true,
-          permissions: availableModules.map(module => ({
-            module,
-            actions: availableActions
-          })),
-          createdAt: '2024-01-01'
-        },
-        {
-          _id: '2',
-          name: 'Colony Manager',
-          description: 'Manage colonies and plots',
-          isActive: true,
-          permissions: [
-            { module: 'colonies', actions: ['create', 'read', 'update'] },
-            { module: 'plots', actions: ['create', 'read', 'update'] },
-            { module: 'bookings', actions: ['read'] }
-          ],
-          createdAt: '2024-01-02'
-        },
-        {
-          _id: '3',
-          name: 'Sales Executive',
-          description: 'Handle bookings and customers',
-          isActive: true,
-          permissions: [
-            { module: 'bookings', actions: ['create', 'read', 'update'] },
-            { module: 'users', actions: ['read'] },
-            { module: 'plots', actions: ['read'] }
-          ],
-          createdAt: '2024-01-03'
-        },
-        {
-          _id: '4',
-          name: 'Buyer',
-          description: 'Customer role',
-          isActive: true,
-          permissions: [
-            { module: 'plots', actions: ['read'] },
-            { module: 'bookings', actions: ['create', 'read'] }
-          ],
-          createdAt: '2024-01-04'
-        }
-      ]
-      setRoles(mockRoles)
+      setLoading(true)
+      const { data } = await axios.get('/roles')
+      setRoles(data.data.roles || [])
       setLoading(false)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/roles')
-      // setRoles(data.data.roles)
-      // setLoading(false)
-      // ============ BACKEND CODE END ============
     } catch (error) {
+      console.error('Failed to fetch roles:', error)
       toast.error('Failed to fetch roles')
       setLoading(false)
     }

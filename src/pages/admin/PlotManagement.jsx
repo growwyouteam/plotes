@@ -30,79 +30,23 @@ const PlotManagement = () => {
 
   const fetchColonies = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockColonies = [
-        { _id: '1', name: 'Green Valley Colony', plotPrefix: 'GVC' },
-        { _id: '2', name: 'Sunrise Heights', plotPrefix: 'SRH' }
-      ]
-      setColonies(mockColonies)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/colonies')
-      // setColonies(data.data.colonies)
-      // ============ BACKEND CODE END ============
+      const { data } = await axios.get('/colonies')
+      setColonies(data.data.colonies || [])
     } catch (error) {
+      console.error('Failed to fetch colonies:', error)
       toast.error('Failed to fetch colonies')
     }
   }
 
   const fetchPlots = async (colonyId = '') => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockPlots = [
-        {
-          _id: '1',
-          plotNo: 'GVC-001',
-          colonyId: { _id: '1', name: 'Green Valley Colony' },
-          partyName: 'Rajesh Kumar',
-          plotType: 'Residential',
-          areaGaj: 250,
-          pricePerGaj: 5000,
-          totalPrice: 1250000,
-          facing: 'North',
-          cornerPlot: true,
-          status: 'available'
-        },
-        {
-          _id: '2',
-          plotNo: 'GVC-002',
-          colonyId: { _id: '1', name: 'Green Valley Colony' },
-          partyName: 'Priya Sharma',
-          plotType: 'Residential',
-          areaGaj: 300,
-          pricePerGaj: 5000,
-          totalPrice: 1500000,
-          facing: 'East',
-          cornerPlot: false,
-          status: 'booked'
-        },
-        {
-          _id: '3',
-          plotNo: 'SRH-001',
-          colonyId: { _id: '2', name: 'Sunrise Heights' },
-          partyName: 'Amit Patel',
-          plotType: 'Commercial',
-          areaGaj: 500,
-          pricePerGaj: 6000,
-          totalPrice: 3000000,
-          facing: 'South',
-          cornerPlot: true,
-          status: 'sold'
-        }
-      ]
-      const filteredPlots = colonyId ? mockPlots.filter(p => p.colonyId._id === colonyId) : mockPlots
-      setPlots(filteredPlots)
+      setLoading(true)
+      const url = colonyId ? `/plots?colonyId=${colonyId}` : '/plots'
+      const { data } = await axios.get(url)
+      setPlots(data.data.plots || [])
       setLoading(false)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const url = colonyId ? `/plots?colonyId=${colonyId}` : '/plots'
-      // const { data } = await axios.get(url)
-      // setPlots(data.data.plots)
-      // setLoading(false)
-      // ============ BACKEND CODE END ============
     } catch (error) {
+      console.error('Failed to fetch plots:', error)
       toast.error('Failed to fetch plots')
       setLoading(false)
     }

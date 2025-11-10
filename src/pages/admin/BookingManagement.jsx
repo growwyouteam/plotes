@@ -53,40 +53,21 @@ const BookingManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockUsers = [
-        { _id: '1', name: 'Rajesh Kumar' },
-        { _id: '2', name: 'Priya Sharma' },
-        { _id: '3', name: 'Amit Patel' }
-      ]
-      setUsers(mockUsers)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/users')
-      // setUsers(data.data.users || [])
-      // ============ BACKEND CODE END ============
+      const { data } = await axios.get('/users')
+      setUsers(data.data.users || [])
     } catch (error) {
-      console.error('Failed to fetch users')
+      console.error('Failed to fetch users:', error)
+      toast.error('Failed to fetch users')
     }
   }
 
   const fetchProperties = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockProperties = [
-        { _id: '1', name: 'Green Valley Colony' },
-        { _id: '2', name: 'Sunrise Heights' }
-      ]
-      setProperties(mockProperties)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/colonies')
-      // setProperties(data.data.colonies || [])
-      // ============ BACKEND CODE END ============
+      const { data } = await axios.get('/colonies')
+      setProperties(data.data.colonies || [])
     } catch (error) {
-      console.error('Failed to fetch properties')
+      console.error('Failed to fetch properties:', error)
+      toast.error('Failed to fetch properties')
     }
   }
 
@@ -140,69 +121,13 @@ const BookingManagement = () => {
 
   const fetchBookings = async (status = '') => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockBookings = [
-        {
-          _id: '1',
-          bookingId: 'BK001',
-          userId: { _id: '1', name: 'Rajesh Kumar' },
-          plotId: {
-            _id: '1',
-            plotNo: 'GVC-001',
-            colonyId: { _id: '1', name: 'Green Valley Colony' }
-          },
-          totalAmount: 1250000,
-          discount: 50000,
-          finalAmount: 1200000,
-          status: 'confirmed',
-          paymentStatus: 'partial',
-          createdAt: '2024-01-15'
-        },
-        {
-          _id: '2',
-          bookingId: 'BK002',
-          userId: { _id: '2', name: 'Priya Sharma' },
-          plotId: {
-            _id: '2',
-            plotNo: 'GVC-002',
-            colonyId: { _id: '1', name: 'Green Valley Colony' }
-          },
-          totalAmount: 1500000,
-          discount: 0,
-          finalAmount: 1500000,
-          status: 'pending',
-          paymentStatus: 'pending',
-          createdAt: '2024-01-20'
-        },
-        {
-          _id: '3',
-          bookingId: 'BK003',
-          userId: { _id: '3', name: 'Amit Patel' },
-          plotId: {
-            _id: '3',
-            plotNo: 'SRH-001',
-            colonyId: { _id: '2', name: 'Sunrise Heights' }
-          },
-          totalAmount: 3000000,
-          discount: 100000,
-          finalAmount: 2900000,
-          status: 'confirmed',
-          paymentStatus: 'completed',
-          createdAt: '2024-01-10'
-        }
-      ]
-      const filteredBookings = status ? mockBookings.filter(b => b.status === status) : mockBookings
-      setBookings(filteredBookings)
+      setLoading(true)
+      const url = status ? `/bookings?status=${status}` : '/bookings'
+      const { data } = await axios.get(url)
+      setBookings(data.data.bookings || [])
       setLoading(false)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const url = status ? `/bookings?status=${status}` : '/bookings'
-      // const { data } = await axios.get(url)
-      // setBookings(data.data.bookings)
-      // setLoading(false)
-      // ============ BACKEND CODE END ============
     } catch (error) {
+      console.error('Failed to fetch bookings:', error)
       toast.error('Failed to fetch bookings')
       setLoading(false)
     }

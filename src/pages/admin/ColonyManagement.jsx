@@ -72,51 +72,12 @@ const ColonyManagement = () => {
 
   const fetchColonies = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockColonies = [
-        {
-          _id: '1',
-          name: 'Green Valley Colony',
-          plotPrefix: 'GVC',
-          totalLandAreaGaj: 50000,
-          totalPlots: 150,
-          availablePlots: 120,
-          soldPlots: 30,
-          basePricePerGaj: 5000,
-          expectedRevenue: 250000000,
-          status: 'active',
-          location: {
-            city: 'Mumbai',
-            address: 'Andheri West, Mumbai'
-          }
-        },
-        {
-          _id: '2',
-          name: 'Sunrise Heights',
-          plotPrefix: 'SRH',
-          totalLandAreaGaj: 35000,
-          totalPlots: 100,
-          availablePlots: 85,
-          soldPlots: 15,
-          basePricePerGaj: 6000,
-          expectedRevenue: 210000000,
-          status: 'active',
-          location: {
-            city: 'Pune',
-            address: 'Hinjewadi, Pune'
-          }
-        }
-      ]
-      setColonies(mockColonies)
+      setLoading(true)
+      const { data } = await axios.get('/colonies')
+      setColonies(data.data.colonies || [])
       setLoading(false)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/colonies')
-      // setColonies(data.data.colonies)
-      // setLoading(false)
-      // ============ BACKEND CODE END ============
     } catch (error) {
+      console.error('Failed to fetch colonies:', error)
       toast.error('Failed to fetch colonies')
       setLoading(false)
     }

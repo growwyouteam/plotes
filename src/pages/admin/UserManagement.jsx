@@ -31,69 +31,22 @@ const UserManagement = () => {
 
   const fetchCities = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockCities = [
-        { _id: '1', name: 'Mumbai' },
-        { _id: '2', name: 'Pune' },
-        { _id: '3', name: 'Nashik' }
-      ]
-      setCities(mockCities)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/cities')
-      // setCities(data.data.cities || [])
-      // ============ BACKEND CODE END ============
+      const { data } = await axios.get('/cities')
+      setCities(data.data.cities || [])
     } catch (error) {
-      console.error('Failed to fetch cities')
+      console.error('Failed to fetch cities:', error)
+      toast.error('Failed to fetch cities')
     }
   }
 
   const fetchUsers = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockUsers = [
-        {
-          _id: '1',
-          name: 'Rajesh Kumar',
-          email: 'rajesh@example.com',
-          phone: '+91 9876543210',
-          roleId: { _id: '2', name: 'Buyer' },
-          cityId: { _id: '1', name: 'Mumbai' },
-          isActive: true,
-          createdAt: '2024-01-01'
-        },
-        {
-          _id: '2',
-          name: 'Priya Sharma',
-          email: 'priya@example.com',
-          phone: '+91 9876543211',
-          roleId: { _id: '2', name: 'Buyer' },
-          cityId: { _id: '2', name: 'Pune' },
-          isActive: true,
-          createdAt: '2024-01-05'
-        },
-        {
-          _id: '3',
-          name: 'Amit Patel',
-          email: 'amit@example.com',
-          phone: '+91 9876543212',
-          roleId: { _id: '2', name: 'Buyer' },
-          cityId: { _id: '1', name: 'Mumbai' },
-          isActive: false,
-          createdAt: '2024-01-10'
-        }
-      ]
-      setUsers(mockUsers)
+      setLoading(true)
+      const { data } = await axios.get('/users')
+      setUsers(data.data.users || [])
       setLoading(false)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/users')
-      // setUsers(data.data.users)
-      // setLoading(false)
-      // ============ BACKEND CODE END ============
     } catch (error) {
+      console.error('Failed to fetch users:', error)
       toast.error('Failed to fetch users')
       setLoading(false)
     }
@@ -101,21 +54,11 @@ const UserManagement = () => {
 
   const fetchRoles = async () => {
     try {
-      // ============ MOCK DATA START - REMOVE WHEN BACKEND READY ============
-      const mockRoles = [
-        { _id: '1', name: 'Super Admin' },
-        { _id: '2', name: 'Buyer' },
-        { _id: '3', name: 'Sales Executive' }
-      ]
-      setRoles(mockRoles)
-      // ============ MOCK DATA END ============
-      
-      // ============ UNCOMMENT WHEN BACKEND READY ============
-      // const { data } = await axios.get('/roles')
-      // setRoles(data.data.roles)
-      // ============ BACKEND CODE END ============
+      const { data } = await axios.get('/roles')
+      setRoles(data.data.roles || [])
     } catch (error) {
-      console.error('Failed to fetch roles')
+      console.error('Failed to fetch roles:', error)
+      toast.error('Failed to fetch roles')
     }
   }
 
