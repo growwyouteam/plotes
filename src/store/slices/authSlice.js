@@ -11,18 +11,24 @@ const initialState = {
   user: null,
   token: localStorage.getItem('token'),
   refreshToken: localStorage.getItem('refreshToken'),
-  isAuthenticated: false,
-  loading: true,
+  isAuthenticated: !!localStorage.getItem('token'),
+  loading: !!localStorage.getItem('token'), // Only load if token exists
   error: null,
 }
 
-// Async thunks
+// Register
 export const register = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/register', userData)
-      return response.data.data
+      // Handle both direct response and wrapped response
+      const data = response.data.data || response.data
+      return {
+        user: data.user,
+        accessToken: data.accessToken || data.token,
+        refreshToken: data.refreshToken,
+      }
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Registration failed')
     }
@@ -34,7 +40,13 @@ export const login = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/login', credentials)
-      return response.data.data
+      // Handle both direct response and wrapped response
+      const data = response.data.data || response.data
+      return {
+        user: data.user,
+        accessToken: data.accessToken || data.token,
+        refreshToken: data.refreshToken,
+      }
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Login failed')
     }
@@ -64,6 +76,18 @@ export const checkAuth = createAsyncThunk(
       const token = localStorage.getItem('token')
       if (!token) {
         return rejectWithValue('No token found')
+      }
+      
+      // Check if demo token
+      if (token.startsWith('demo-admin-token') || token.startsWith('demo-token-')) {
+        // Return demo user for demo tokens
+        const demoUser = JSON.parse(localStorage.getItem('user')) || {
+          _id: 'demo123',
+          name: 'Demo User',
+          email: localStorage.getItem('email') || 'demo@example.com',
+          roleId: { name: 'Buyer' },
+        }
+        return { user: demoUser }
       }
       
       const response = await api.get('/auth/me')
