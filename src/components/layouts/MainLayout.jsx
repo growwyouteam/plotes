@@ -93,11 +93,6 @@ const MainLayout = () => {
   // Navigation items based on role
   const getNavigationItems = () => {
     const roleName = user?.roleId?.name
-    
-    // Debug logging
-    console.log('🔍 User object:', user)
-    console.log('🔍 Role Name:', roleName)
-    console.log('🔍 Role ID:', user?.roleId)
 
     const commonItems = [
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
