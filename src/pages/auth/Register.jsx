@@ -45,6 +45,11 @@ const Register = () => {
       return
     }
 
+    // Clear any existing tokens before registration
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('user')
+
     try {
       await dispatch(register({
         name: formData.name,

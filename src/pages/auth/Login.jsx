@@ -37,6 +37,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
+    // Clear any existing tokens before login to prevent 401 errors
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('user')
+    
     try {
       await dispatch(login(formData)).unwrap()
       toast.success('Login successful!')
